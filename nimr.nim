@@ -32,8 +32,6 @@ proc compile(compiler, tmpdir, srcFile: string): int =
   let compCmd = "nim c --verbosity:0 --hints:off --cc:$1 ".format(compiler)
   let outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
 
-  let (srcPath, _) = splitPath(srcFile)
-
   result = execCmd(compCmd & outputs & srcFile)
 
 
