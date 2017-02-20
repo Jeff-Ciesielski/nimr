@@ -1,10 +1,6 @@
 import os
 import osproc
 import strutils
-import random
-
-# Seed the random number generator
-randomize()
 
 
 proc findOrCreateTempDir(srcFile: string): string =
