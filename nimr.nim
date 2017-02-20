@@ -20,6 +20,8 @@ proc findOrCreateTempDir(srcFile: string): string =
 
 
 proc selectCompiler(): string =
+  ## Try to use tcc/clang first since they tend to be faster, default
+  ## to GCC if we can't find either of the others in our path
   if findExe("tcc") != "":
     result = "tcc"
   elif findExe("clang") != "":
@@ -29,6 +31,8 @@ proc selectCompiler(): string =
 
 
 proc compile(compiler, tmpdir, srcFile: string): int =
+  ## Executes the nim compiler, placing the nimcache and executables
+  ## in <tmp>/nimr/
   let compCmd = "nim c --verbosity:0 --hints:off --cc:$1 ".format(compiler)
   let outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
 
