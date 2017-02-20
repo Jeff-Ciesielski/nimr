@@ -16,3 +16,7 @@ Installation via Nimble is recommended:  `nimble install nimr`
 
 After installation, simply add `#!/usr/bin/env nimr` as the first line
 of your script (just like you would with python/ruby/etc).
+
+## Features
+
+* Caching of compilation results

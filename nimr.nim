@@ -7,18 +7,14 @@ import random
 randomize()
 
 
-proc randomString(length: int): string =
-  result = newString(length)
-  for i in 0..<length:
-    result[i] =  random('A'.int..'Z'.int).char
-
-
-proc createSrcTempDir(srcFile: string): string =
+proc findOrCreateTempDir(srcFile: string): string =
+  ## Checks for existing temporary directories so that we might use
+  ## the already cached compilation results.  If no directory exists,
+  ## we create one
   let tmpDir = getTempDir()
   let (_, srcName, _) = splitFile(srcFile)
-  let suffix = randomString(4)
 
-  result = tmpDir / srcName / "." / suffix
+  result = tmpDir / "nimr" / srcName
 
   createDir(result)
 
@@ -34,7 +30,7 @@ proc selectCompiler(): string =
 
 proc compile(compiler, tmpdir, srcFile: string): int =
   let compCmd = "nim c --verbosity:0 --hints:off --cc:$1 ".format(compiler)
-  let outputs = "--out:$1executable --nimcache:$1 ".format(tmpdir)
+  let outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
 
   let (srcPath, _) = splitPath(srcFile)
 
@@ -52,13 +48,13 @@ when isMainModule:
   let srcFile = args[0]
   args.delete(0)
 
-  let tmpDir = createSrcTempDir(srcFile)
+  let tmpDir = findOrCreateTempDir(srcFile)
   defer:
     removeDir(tmpDir)
 
   let compilerResult = compile(compiler, tmpDir, srcFile)
 
   if compilerResult == 0:
-    quit(execCmd("$1executable ".format(tmpDir) & args.join(" ")))
+    quit(execCmd("$1_executable ".format(tmpDir) & args.join(" ")))
   else:
     quit(compilerResult)
