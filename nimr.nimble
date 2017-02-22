@@ -13,3 +13,7 @@ requires "nim >= 0.16.0"
 
 bin           = @["nimr"]
 
+# Settings
+
+srcDir        = "src"
+
