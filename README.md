@@ -6,7 +6,7 @@ nim and can be installed via nimble (for a nice smooth install).
 
 ## Requirements
 
-Nim compiler >= 16.0
+Nim compiler >= 0.16.0
 
 ## Installation
 
