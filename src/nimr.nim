@@ -29,14 +29,13 @@ proc selectCompiler(): string =
 proc compile(compiler, tmpdir, srcFile: string): int =
   ## Executes the nim compiler, placing the nimcache and executables
   ## in <tmp>/nimr/
-  let compCmd = "nim c --verbosity:0 --hints:off --cc:$1 ".format(compiler)
+  let compCmd = "nim c --threads:on --verbosity:0 --hints:off --cc:$1 ".format(compiler)
   let outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
 
   result = execCmd(compCmd & outputs & srcFile)
 
 
-when isMainModule:
-
+proc main() =
   let compiler = selectCompiler()
   var args = commandLineParams()
 
@@ -56,3 +55,6 @@ when isMainModule:
     quit(execCmd("$1_executable ".format(tmpDir) & args.join(" ")))
   else:
     quit(compilerResult)
+
+when isMainModule:
+  main()
