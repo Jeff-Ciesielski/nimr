@@ -29,10 +29,15 @@ proc selectCompiler(): string =
 proc compile(compiler, tmpdir, srcFile: string): int =
   ## Executes the nim compiler, placing the nimcache and executables
   ## in <tmp>/nimr/
-  let compCmd = "nim c --threads:on --verbosity:0 --hints:off --cc:$1 ".format(compiler)
-  let outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
+  let
+    compCmd = "nim c --threads:on --verbosity:0 --hints:off --cc:$1 ".format(compiler)
+    opts = if compiler == "tcc":
+             "--tlsEmulation:on "
+           else:
+             ""
+    outputs = "--out:$1_executable --nimcache:$1 ".format(tmpdir)
 
-  result = execCmd(compCmd & outputs & srcFile)
+  result = execCmd(compCmd & opts & outputs & srcFile)
 
 
 proc main() =
